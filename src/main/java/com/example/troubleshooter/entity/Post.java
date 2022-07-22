@@ -8,8 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter @Setter
 @Entity
 public class Post {
@@ -35,4 +33,13 @@ public class Post {
 
     @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    public Post(String title, String content, String category, boolean solved, User user, List<Comment> comments) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.solved = false;
+        this.user = user;
+        this.comments = comments;
+    }
 }
