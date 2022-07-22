@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
     // @AuthenticationPrincipal을 사용하여, userDetails.getUsername()을 사용하면, 사용자가 등록한 nickname값을 불러온다.
     @Override
     public String getUsername() {
-        return user.getNickname();
+        return user.getUserId();
     }
 
     @Override
