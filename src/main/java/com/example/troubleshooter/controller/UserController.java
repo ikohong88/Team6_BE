@@ -1,9 +1,13 @@
 package com.example.troubleshooter.controller;
 
 import com.example.troubleshooter.dto.UserRequestDto;
+import com.example.troubleshooter.security.UserDetailsImpl;
 import com.example.troubleshooter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +20,13 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    // 테스트용 - 로그인시 @AuthenticationPrincipal 정상 작동?
+    @GetMapping("/")
+    @ResponseBody
+    public String home(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userDetails.getUsername();
     }
 
     // 회원가입
@@ -31,10 +42,10 @@ public class UserController {
     }
 
     // 로그인
-    //
-    @PostMapping("/api/login")
-    @ResponseBody
-    public void login(@RequestBody UserRequestDto userRequestDto) {
-
-    }
+    // 시큐리티에서 처리를 하기 떄문에 controller에 구현 필요 X
+//    @PostMapping("/api/login")
+//    @ResponseBody
+//    public void login(@RequestBody UserRequestDto userRequestDto) {
+//
+//    }
 }
