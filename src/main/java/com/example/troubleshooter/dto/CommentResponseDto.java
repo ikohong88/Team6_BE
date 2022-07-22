@@ -14,5 +14,4 @@ public class CommentResponseDto {
         nickname = comment.getUser().getNickname();
         content = comment.getContent();
     }
-
 }
