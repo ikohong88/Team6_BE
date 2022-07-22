@@ -1,16 +1,17 @@
 package com.example.troubleshooter.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
+@NoArgsConstructor
 @Getter @Setter
 @Entity
 public class Post {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -26,20 +27,18 @@ public class Post {
     @Column(nullable = false)
     private boolean solved;
 
-    @ManyToOne
-    @JoinColumn(name="USER_ID",nullable = false)
-    @JsonIgnore
-    private User user;
+    @Column(nullable = false)
+    private String userId;
 
-    @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    public Post(String title, String content, String category, boolean solved, User user, List<Comment> comments) {
+    public Post(String title, String content, String category, boolean solved, String userId, List<Comment> comments) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.solved = false;
-        this.user = user;
+        this.userId = userId;
         this.comments = comments;
     }
 }
