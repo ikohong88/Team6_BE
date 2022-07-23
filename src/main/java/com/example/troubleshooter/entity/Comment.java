@@ -24,8 +24,13 @@ public class Comment {
 
     private Long userId;
 
-    public Comment(CommentRequestDto commentRequestDto) {
+    public Comment(CommentRequestDto commentRequestDto, Long userId) {
         content = commentRequestDto.getContent();
+        this.userId = userId;
+    }
+
+    public boolean isWriter(Long userId) {
+        return this.userId.equals(userId);
     }
 
 }
