@@ -2,12 +2,12 @@ package com.example.troubleshooter.dto;
 
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 public class CommentRequestDto {
 
-    @NotNull
+    @NotBlank
     String content;
 
 }

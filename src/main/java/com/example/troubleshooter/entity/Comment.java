@@ -29,7 +29,7 @@ public class Comment {
         this.userId = userId;
     }
 
-    public boolean isWriter(Long userId) {
+    public boolean isCommenter(Long userId) {
         return this.userId.equals(userId);
     }
 
