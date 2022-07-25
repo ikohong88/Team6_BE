@@ -8,7 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserRequestDto {
     // 회원 가입
-    private String userId;
-    private String password;
+    private String username;
     private String nickname;
+    private String password;
+    private String passwordCheck;
 }

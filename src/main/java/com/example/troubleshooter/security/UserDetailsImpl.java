@@ -1,11 +1,13 @@
 package com.example.troubleshooter.security;
 
 import com.example.troubleshooter.entity.User;
+import com.example.troubleshooter.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -24,11 +26,9 @@ public class UserDetailsImpl implements UserDetails {
         return user.getPassword();
     }
 
-    // getUsername()을 활용하여, 닉네임 찾아볼수 있도록 작성??
-    // @AuthenticationPrincipal을 사용하여, userDetails.getUsername()을 사용하면, 사용자가 등록한 nickname값을 불러온다.
     @Override
     public String getUsername() {
-        return user.getUserId();
+        return user.getUsername();
     }
 
     @Override
@@ -53,6 +53,13 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        UserRoleEnum role = user.getRole();
+        String authority = role.getAuthority();
+
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(simpleGrantedAuthority);
+
+        return authorities;
     }
 }
