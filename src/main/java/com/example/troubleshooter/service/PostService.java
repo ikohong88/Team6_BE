@@ -58,6 +58,7 @@ public class PostService {
     //작성
     @Transactional
     public PostMessageDto create(PostRequestDto requestDto, UserDetailsImpl userDetails){
+        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
         boolean ok = true;
         String message = "생성 성공";
         requestDto.setSolved(false);
@@ -74,6 +75,7 @@ public class PostService {
     //수정
     @Transactional
     public PostMessageDto update(Long postId, PostRequestDto requestDto, UserDetailsImpl userDetails){
+        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
         boolean ok = true;
         String message = "수정 성공";
         Post post = postRepository.findById(postId).orElseThrow(
@@ -98,6 +100,7 @@ public class PostService {
     //삭제
     @Transactional
     public PostMessageDto delete(Long postId, UserDetailsImpl userDetails){
+        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
         boolean ok = true;
         String message = "삭제 성공";
         Long id = userDetails.getUser().getId();

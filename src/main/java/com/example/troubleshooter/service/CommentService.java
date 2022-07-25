@@ -21,7 +21,9 @@ public class CommentService {
     public void writeComment(Long postId, CommentRequestDto commentRequestDto, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
-        post.addComment(new Comment(commentRequestDto, userId));
+        Comment comment = new Comment(commentRequestDto, userId);
+        post.addComment(comment);
+        commentRepository.save(comment);
     }
 
     public void editComment(Long commentId, CommentRequestDto commentRequestDto, Long userId) {
