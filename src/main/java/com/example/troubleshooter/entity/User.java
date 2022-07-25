@@ -1,35 +1,43 @@
 package com.example.troubleshooter.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
-@Getter
-@Entity
-// 스프링 버전업으로 인한 User테이블 생성 시도시 에러발생
-// 해결 : UserTable로 테이블명 변경
-@Table(name="UserTable")
+@Setter
+@Getter // get 함수를 일괄적으로 만들어줍니다.
+@NoArgsConstructor // 기본 생성자를 만들어줍니다.
+@AllArgsConstructor
+@Entity // DB 테이블 역할을 합니다.
 public class User {
-    @Id
+
+    // ID가 자동으로 생성 및 증가합니다.
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     private Long id;
 
-    // 사용자 ID
+    // nullable: null 허용 여부
+    // unique: 중복 허용 여부 (false 일때 중복 허용)
     @Column(nullable = false, unique = true)
-    private String userId;
-
-    // 사용자 닉네임
-    @Column(nullable = false, unique = true)
-    private String nickname;
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    public User(String userId, String nickname, String password) {
-        this.userId = userId;
-        this.nickname = nickname;
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
+    public User(String username, String password, String nickname, UserRoleEnum role) {
+        this.username = username;
         this.password = password;
+        this.nickname = nickname;
+        this.role = role;
     }
 }
