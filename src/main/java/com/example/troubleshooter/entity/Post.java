@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +41,10 @@ public class Post {
         this.solved = false;
         this.userId = userId;
         this.comments = comments;
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
     }
 }

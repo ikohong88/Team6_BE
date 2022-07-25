@@ -6,12 +6,13 @@ import lombok.Getter;
 @Getter
 public class CommentResponseDto {
 
-    private String nickname;
-    
     private String content;
 
-    public CommentResponseDto(Comment comment) {
-        nickname = comment.getUser().getNickname();
+    private String nickname;
+
+    public CommentResponseDto(Comment comment, String nickname) {
         content = comment.getContent();
+        this.nickname = nickname;
     }
+
 }

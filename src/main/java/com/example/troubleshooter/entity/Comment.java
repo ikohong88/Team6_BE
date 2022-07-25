@@ -1,12 +1,15 @@
 package com.example.troubleshooter.entity;
 
+import com.example.troubleshooter.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Comment {
 
@@ -18,8 +21,16 @@ public class Comment {
 
     @ManyToOne
     private Post post;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    private Long userId;
+
+    public Comment(CommentRequestDto commentRequestDto, Long userId) {
+        content = commentRequestDto.getContent();
+        this.userId = userId;
+    }
+
+    public boolean isCommenter(Long userId) {
+        return this.userId.equals(userId);
+    }
+
 }
