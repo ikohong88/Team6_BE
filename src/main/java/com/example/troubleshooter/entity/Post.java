@@ -1,5 +1,7 @@
 package com.example.troubleshooter.entity;
 
+import com.example.troubleshooter.dto.PostRequestDto;
+import com.example.troubleshooter.security.UserDetailsImpl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,18 +31,30 @@ public class Post {
     private boolean solved;
 
     @Column(nullable = false)
-    private String userId;
+    private Long userId;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    public Post(String title, String content, String category, boolean solved, String userId, List<Comment> comments) {
+    public Post(String title, String content, String category, boolean solved, Long userId, List<Comment> comments) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.solved = false;
         this.userId = userId;
         this.comments = comments;
+    }
+    public Post(PostRequestDto requestDto, UserDetailsImpl userDetails) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = requestDto.getCategory();
+        this.userId = userDetails.getUser().getId();
+    }
+
+    public void update(PostRequestDto requestDto){
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.solved = requestDto.isSolved();
     }
 
     public void addComment(Comment comment) {
