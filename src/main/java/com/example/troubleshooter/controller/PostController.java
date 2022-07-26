@@ -1,11 +1,12 @@
 package com.example.troubleshooter.controller;
 
-import com.example.troubleshooter.dto.PostMessageDto;
 import com.example.troubleshooter.dto.PostRequestDto;
 import com.example.troubleshooter.dto.PostResponseDto;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import com.example.troubleshooter.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,33 +18,39 @@ public class PostController {
 
     private final PostService postService;
 
-    //조회
+    // 게시글 목록 조회
     @GetMapping("/api/posts")
-    public List<PostResponseDto> getPosts(){
-        return postService.posts();
+    public ResponseEntity<List<PostResponseDto>> getPosts() {
+        List<PostResponseDto> postList = postService.getPostList();
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
-    //읽기
+    // 게시글 상세정보 조회
     @GetMapping("/api/posts/{postId}")
-    public PostResponseDto getPost(@PathVariable Long postId){
-        return postService.post(postId);
+    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
+        PostResponseDto postDetail = postService.getPostDetail(postId);
+        return new ResponseEntity<>(postDetail, HttpStatus.OK);
     }
 
-    //작성
+    // 게시글 작성
     @PostMapping("/api/posts")
-    public PostMessageDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.create(requestDto, userDetails);
+    public ResponseEntity postPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.writePost(postRequestDto, userDetails.getUser());
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //수정
+    // 게시글 수정
     @PutMapping("/api/posts/{postId}")
-    public PostMessageDto updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.update(postId,requestDto,userDetails);
+    public ResponseEntity putPost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.editPost(postId, postRequestDto, userDetails.getUser());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //삭제
+    // 게시글 삭제
     @DeleteMapping("/api/posts/{postId}")
-    public PostMessageDto daletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.delete(postId,userDetails);
+    public ResponseEntity deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getUser());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

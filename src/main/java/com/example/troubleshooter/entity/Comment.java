@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Comment {
+public class Comment extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,18 +19,15 @@ public class Comment {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    private Long userId;
+    @ManyToOne
+    private User user;
 
-    public Comment(CommentRequestDto commentRequestDto, Long userId) {
+    public Comment(CommentRequestDto commentRequestDto, User user) {
         content = commentRequestDto.getContent();
-        this.userId = userId;
-    }
-
-    public boolean isCommenter(Long userId) {
-        return this.userId.equals(userId);
+        this.user = user;
     }
 
 }

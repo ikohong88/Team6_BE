@@ -1,7 +1,6 @@
 package com.example.troubleshooter.dto;
 
 import com.example.troubleshooter.entity.Comment;
-import com.example.troubleshooter.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -13,14 +12,10 @@ public class CommentResponseDto {
 
     private String nickname;
 
-    public CommentResponseDto(Comment comment, String nickname) {
+    public CommentResponseDto(Comment comment) {
+        id = comment.getId();
         content = comment.getContent();
-        this.nickname = nickname;
+        nickname = comment.getUser().getNickname();
     }
 
-    public CommentResponseDto(Comment comment, User user) {
-        this.id = comment.getId();
-        this.content = comment.getContent();
-        this.nickname = user.getNickname();
-    }
 }

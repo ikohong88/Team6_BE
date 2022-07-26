@@ -17,24 +17,24 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    // 댓글 작성
     @PostMapping("/api/posts/{postId}/comments")
     public ResponseEntity postComment(@PathVariable Long postId, @RequestBody @Valid CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        commentService.writeComment(postId, commentRequestDto, userDetails.getUser().getId());
+        commentService.writeComment(postId, commentRequestDto, userDetails.getUser());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
+    // 댓글 수정
     @PutMapping("/api/comments/{commentId}")
     public ResponseEntity putComment(@PathVariable Long commentId, @RequestBody @Valid CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        commentService.editComment(commentId, commentRequestDto, userDetails.getUser().getId());
+        commentService.editComment(commentId, commentRequestDto, userDetails.getUser());
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 댓글 삭제
     @DeleteMapping("/api/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        commentService.deleteComment(commentId, userDetails.getUser().getId());
+        commentService.deleteComment(commentId, userDetails.getUser());
         return new ResponseEntity(HttpStatus.OK);
     }
 

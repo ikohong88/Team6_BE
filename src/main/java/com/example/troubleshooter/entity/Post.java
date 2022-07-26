@@ -1,7 +1,6 @@
 package com.example.troubleshooter.entity;
 
 import com.example.troubleshooter.dto.PostRequestDto;
-import com.example.troubleshooter.security.UserDetailsImpl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,52 +12,41 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Post {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Post extends TimeStamp {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
+    private String title;
+
+    private String content;
+
     private boolean solved;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne
+    private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    public Post(String title, String content, String category, boolean solved, Long userId, List<Comment> comments) {
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.solved = false;
-        this.userId = userId;
-        this.comments = comments;
-    }
-    public Post(PostRequestDto requestDto, UserDetailsImpl userDetails) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
-        this.userId = userDetails.getUser().getId();
+    public Post(PostRequestDto postRequestDto, User user) {
+        category = postRequestDto.getCategory();
+        title = postRequestDto.getTitle();
+        content = postRequestDto.getContent();
+        this.user = user;
     }
 
-    public void update(PostRequestDto requestDto){
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.solved = requestDto.isSolved();
+    public void edit(PostRequestDto postRequestDto) {
+        title = postRequestDto.getTitle();
+        content = postRequestDto.getContent();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setPost(this);
     }
+
 }

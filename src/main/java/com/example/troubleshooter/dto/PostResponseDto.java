@@ -1,41 +1,47 @@
 package com.example.troubleshooter.dto;
 
 import com.example.troubleshooter.entity.Post;
-import com.example.troubleshooter.entity.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
 public class PostResponseDto {
-    private String title;
-    private String nickname;
-    private String category;
-    private boolean solved;
-    private int commentCnt;
+
     private Long postId;
+
+    private String category;
+
+    private String title;
+
     private String content;
+    
+    private boolean solved;
+
+    private String nickname;
+
     private List<CommentResponseDto> comments;
 
-    public PostResponseDto(Post post, User user) {
-        this.title = post.getTitle();
-        this.nickname = user.getNickname();
-        this.category = post.getCategory();
-        this.solved = post.isSolved();
-        this.commentCnt = post.getComments().size();
-        this.postId = post.getId();
+    private int commentCount;
+
+    public PostResponseDto(Post post) {
+        postId = post.getId();
+        category = post.getCategory();
+        title = post.getTitle();
+        nickname = post.getUser().getNickname();
+        solved = post.isSolved();
+        commentCount = post.getComments().size();
     }
 
-    public PostResponseDto(Post post, User user, List<CommentResponseDto> comments) {
-        this.title = post.getTitle();
-        this.nickname = user.getNickname();
-        this.category = post.getCategory();
-        this.solved = post.isSolved();
-        this.commentCnt = post.getComments().size();
-        this.postId = post.getId();
-        this.content = post.getContent();
+    public PostResponseDto(Post post, List<CommentResponseDto> comments) {
+        postId = post.getId();
+        category = post.getCategory();
+        title = post.getTitle();
+        content = post.getContent();
+        nickname = post.getUser().getNickname();
+        solved = post.isSolved();
+        commentCount = post.getComments().size();
         this.comments = comments;
     }
+
 }
