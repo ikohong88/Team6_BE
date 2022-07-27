@@ -1,9 +1,6 @@
 package com.example.troubleshooter.service;
 
-import com.example.troubleshooter.dto.CommentResponseDto;
-import com.example.troubleshooter.dto.PostMessageDto;
-import com.example.troubleshooter.dto.PostRequestDto;
-import com.example.troubleshooter.dto.PostResponseDto;
+import com.example.troubleshooter.dto.*;
 import com.example.troubleshooter.entity.Comment;
 import com.example.troubleshooter.entity.Post;
 import com.example.troubleshooter.entity.User;
@@ -11,6 +8,7 @@ import com.example.troubleshooter.repository.PostRepository;
 import com.example.troubleshooter.repository.UserRepository;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,15 +59,27 @@ public class PostService {
         if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
         boolean ok = true;
         String message = "생성 성공";
-        requestDto.setSolved(false);
         Post post = new Post(requestDto,userDetails);
         if(EmptyValue(requestDto)){
-            ok = false;
-            message = "생성 실패";
             throw new IllegalArgumentException("글을 입력해주세요.");
         }
         postRepository.save(post);
         return new PostMessageDto(ok,message);
+    }
+
+    //pickedComment patch
+    @Transactional
+    public RestApi pickedComment(Long postId, PickedCommentDto pickedCommentDto, UserDetailsImpl userDetails){
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+        );
+        Long id = userDetails.getUser().getId();
+        Long userId = post.getUserId();
+        if(NotUser(id, userId)) throw new IllegalArgumentException("작성자가 아닙니다.");
+        post.patch(pickedCommentDto);
+        String Message = "답변이 선택되었습니다.";
+        HttpStatus httpStatus = HttpStatus.OK;
+        return new RestApi(Message, httpStatus);
     }
 
     //수정
@@ -83,16 +93,8 @@ public class PostService {
         );
         Long id = userDetails.getUser().getId();
         Long userId = post.getUserId();
-        if(NotUser(id, userId)){
-            ok = false;
-            message = "수정 실패";
-            throw new IllegalArgumentException("작성자가 아닙니다.");
-        }
-        if(EmptyValue(requestDto)){
-            ok = false;
-            message = "수정 실패";
-            throw new IllegalArgumentException("글을 입력해주세요.");
-        }
+        if(NotUser(id, userId)) throw new IllegalArgumentException("작성자가 아닙니다.");
+        if(EmptyValue(requestDto)) throw new IllegalArgumentException("글을 입력해주세요.");
         post.update(requestDto);
         return new PostMessageDto(ok,message);
     }
@@ -105,10 +107,7 @@ public class PostService {
         String message = "삭제 성공";
         Long id = userDetails.getUser().getId();
         Long userId = postRepository.findById(postId).get().getUserId();
-        if(NotUser(id, userId)){
-            ok = false; message = "삭제 실패";
-            throw new IllegalArgumentException("작성자가 아닙니다.");
-        }
+        if(NotUser(id, userId)) throw new IllegalArgumentException("작성자가 아닙니다.");
         postRepository.deleteById(postId);
         return new PostMessageDto(ok,message);
     }

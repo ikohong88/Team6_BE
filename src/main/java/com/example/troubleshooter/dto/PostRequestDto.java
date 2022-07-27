@@ -17,5 +17,4 @@ public class PostRequestDto {
     String category;
     @NotNull
     String content;
-    boolean solved;
 }

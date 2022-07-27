@@ -1,8 +1,6 @@
 package com.example.troubleshooter.controller;
 
-import com.example.troubleshooter.dto.PostMessageDto;
-import com.example.troubleshooter.dto.PostRequestDto;
-import com.example.troubleshooter.dto.PostResponseDto;
+import com.example.troubleshooter.dto.*;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import com.example.troubleshooter.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +31,12 @@ public class PostController {
     @PostMapping("/api/posts")
     public PostMessageDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.create(requestDto, userDetails);
+    }
+
+    // pickedComment patch
+    @PutMapping("/api/posts/{postId}/comments")
+    public RestApi pickedComment(@PathVariable Long postId, @RequestBody PickedCommentDto pickedCommentDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.pickedComment(postId,pickedCommentDto,userDetails);
     }
 
     //수정
