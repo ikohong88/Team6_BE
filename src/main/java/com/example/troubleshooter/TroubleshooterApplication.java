@@ -1,6 +1,5 @@
 package com.example.troubleshooter;
 
-import com.auth0.jwt.JWT;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -29,7 +28,9 @@ public class TroubleshooterApplication {
                         // blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 //                        .allowCredentials(true)
 //                       접근할수있도록 IP 주소 입력
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .allowedHeaders("*")
+                        .allowedMethods("*");
             }
         };
     }
