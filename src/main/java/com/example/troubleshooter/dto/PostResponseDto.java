@@ -13,8 +13,9 @@ public class PostResponseDto {
     private String title;
     private String nickname;
     private String category;
-    private Long pickedComment;
-    private int commentCnt;
+//    private Long pickedComment;
+    private boolean solved;
+    private int commentCount;
     private Long postId;
     private String content;
     private List<CommentResponseDto> comments;
@@ -23,8 +24,8 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.nickname = user.getNickname();
         this.category = post.getCategory();
-        this.pickedComment = post.getPickedComment();
-        this.commentCnt = post.getComments().size();
+        this.solved = post.isSolved();
+        this.commentCount = post.getComments().size();
         this.postId = post.getId();
     }
 
@@ -32,8 +33,8 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.nickname = user.getNickname();
         this.category = post.getCategory();
-        this.pickedComment = post.getPickedComment();
-        this.commentCnt = post.getComments().size();
+        this.solved = post.isSolved();
+        this.commentCount = post.getComments().size();
         this.postId = post.getId();
         this.content = post.getContent();
         this.comments = comments;
