@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class PickedCommentDto {
-    private Long commentId;
+//    private Long commentId;
+    private boolean solved;
 }

@@ -31,8 +31,9 @@ public class Post {
     @Column(nullable = false)
     private Long userId;
 
-    @Column
-    private Long pickedComment;
+    @Column(nullable = false)
+    private boolean solved;
+//    private Long pickedComment;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
@@ -49,8 +50,11 @@ public class Post {
         this.content = requestDto.getContent();
     }
 
+//    public void patch(PickedCommentDto pickedCommentDto){
+//        this.pickedComment = pickedCommentDto.getCommentId();
+//    }
     public void patch(PickedCommentDto pickedCommentDto){
-        this.pickedComment = pickedCommentDto.getCommentId();
+        this.solved = pickedCommentDto.isSolved();
     }
 
     public void addComment(Comment comment) {
