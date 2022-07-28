@@ -55,16 +55,16 @@ public class PostService {
 
     //작성
     @Transactional
-    public PostMessageDto create(PostRequestDto requestDto, UserDetailsImpl userDetails){
+    public RestApi create(PostRequestDto requestDto, UserDetailsImpl userDetails){
         if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        boolean ok = true;
-        String message = "생성 성공";
         Post post = new Post(requestDto,userDetails);
         if(EmptyValue(requestDto)){
             throw new IllegalArgumentException("글을 입력해주세요.");
         }
         postRepository.save(post);
-        return new PostMessageDto(ok,message);
+        String Message = "작성 성공";
+        HttpStatus httpStatus = HttpStatus.OK;
+        return new RestApi(Message, httpStatus);
     }
 
     //pickedComment patch
@@ -84,10 +84,8 @@ public class PostService {
 
     //수정
     @Transactional
-    public PostMessageDto update(Long postId, PostRequestDto requestDto, UserDetailsImpl userDetails){
+    public RestApi update(Long postId, PostRequestDto requestDto, UserDetailsImpl userDetails){
         if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        boolean ok = true;
-        String message = "수정 성공";
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
@@ -96,20 +94,22 @@ public class PostService {
         if(NotUser(id, userId)) throw new IllegalArgumentException("작성자가 아닙니다.");
         if(EmptyValue(requestDto)) throw new IllegalArgumentException("글을 입력해주세요.");
         post.update(requestDto);
-        return new PostMessageDto(ok,message);
+        String Message = "수정 성공";
+        HttpStatus httpStatus = HttpStatus.OK;
+        return new RestApi(Message, httpStatus);
     }
 
     //삭제
     @Transactional
-    public PostMessageDto delete(Long postId, UserDetailsImpl userDetails){
+    public RestApi delete(Long postId, UserDetailsImpl userDetails){
         if (userDetails == null) throw new IllegalArgumentException("로그인이 필요합니다.");
-        boolean ok = true;
-        String message = "삭제 성공";
         Long id = userDetails.getUser().getId();
         Long userId = postRepository.findById(postId).get().getUserId();
         if(NotUser(id, userId)) throw new IllegalArgumentException("작성자가 아닙니다.");
         postRepository.deleteById(postId);
-        return new PostMessageDto(ok,message);
+        String Message = "삭제 성공";
+        HttpStatus httpStatus = HttpStatus.OK;
+        return new RestApi(Message, httpStatus);
     }
 
     public boolean NotUser(Long id, Long userId){
