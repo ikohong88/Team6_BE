@@ -47,17 +47,23 @@
 
 ## 7. 기능
 * 로그인
-  * 아이디, 비밀번호, 비밀번호 확인
-  * 회원일 경우 JWT를 활용하여 토큰 발행 후 로그인 허용
 * 회원가입
-  * 아이디, 비밀번호 확인
-
+----------
 * 게시글 조회
 * 게시글 작성
 * 게시글 수정
 * 게시글 삭제
+----------
 * 댓글 작성
 * 댓글 수정
 * 댓글 삭제
 
-## 8. 에러사항
+## 8. 에러 & 해결
+* AWS 서버 배포시 JWT관련 @Bean 생성 불가로 인한 스프링 구동 실패
+ * compileOnly 'com.auth0:java-jwt:3.13.0' 를 implementation 'com.auth0:java-jwt:3.13.0'로 수정이후 에러현상 해결
+* 로컬에서 CORS 테스트를 진행했을때, 'blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.'에러 발생
+ * .allowCredentials(true) 주석 처리 이후, 정상적으로 작동 [ 현재 프로젝트에서는 정상작동을 하나, 클라이언트에서 쿠키를 받을수 있도록 허용하는 코드라 수정이 필요할 수 있습니다. ]
+* User 이름으로 테이블 생성시 에러가 발생하는 현상
+ * 스프링 버전 2.7.2버젼에서 2.6.10버젼으로 다운그레이드 후 정상적으로 생성, 버젼 다운그레이드 하기전에는 @Table(name="UserTable")로 변경하여서 사용
+* 통합 테스트 진행중, 'Ensure CORS response header values are valid' 에러 발생
+ * CORS 설정에 .allowedHeaders(*).allowedMethods(*) 코드 추가 이후 해결
