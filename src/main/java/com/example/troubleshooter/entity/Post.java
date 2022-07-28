@@ -5,14 +5,12 @@ import com.example.troubleshooter.dto.PostRequestDto;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
