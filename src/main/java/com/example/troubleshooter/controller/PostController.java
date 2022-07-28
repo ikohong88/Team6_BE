@@ -1,6 +1,9 @@
 package com.example.troubleshooter.controller;
 
-import com.example.troubleshooter.dto.*;
+import com.example.troubleshooter.dto.PickedCommentDto;
+import com.example.troubleshooter.dto.PostRequestDto;
+import com.example.troubleshooter.dto.PostResponseDto;
+import com.example.troubleshooter.dto.RestApi;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import com.example.troubleshooter.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +20,9 @@ public class PostController {
 
     //조회
     @GetMapping("/api/posts")
-    public List<PostResponseDto> getPosts(){
-        return postService.posts();
+    public List<PostResponseDto> getPosts(@RequestParam("page") int page, @RequestParam("size") int size){
+        page = page - 1;
+        return postService.posts(page,size);
     }
 
     //읽기
