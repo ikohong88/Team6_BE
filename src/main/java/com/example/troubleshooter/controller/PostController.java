@@ -29,7 +29,7 @@ public class PostController {
 
     //작성
     @PostMapping("/api/posts")
-    public PostMessageDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public RestApi createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.create(requestDto, userDetails);
     }
 
@@ -41,13 +41,13 @@ public class PostController {
 
     //수정
     @PutMapping("/api/posts/{postId}")
-    public PostMessageDto updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public RestApi updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.update(postId,requestDto,userDetails);
     }
 
     //삭제
     @DeleteMapping("/api/posts/{postId}")
-    public PostMessageDto daletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public RestApi daletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.delete(postId,userDetails);
     }
 }
