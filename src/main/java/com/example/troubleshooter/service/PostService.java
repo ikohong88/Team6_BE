@@ -8,6 +8,9 @@ import com.example.troubleshooter.repository.PostRepository;
 import com.example.troubleshooter.repository.UserRepository;
 import com.example.troubleshooter.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +26,9 @@ public class PostService {
 
     //조회
     @Transactional
-    public List<PostResponseDto> posts(){
-        List<Post> posts = postRepository.findAllByOrderByIdDesc();
+    public List<PostResponseDto> posts(int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Post> posts = postRepository.findAllByOrderByIdDesc(pageable);
         List<PostResponseDto> result = new ArrayList<>();
         for(Post post : posts){
             User user = userRepository.findNicknameById(post.getUserId());
